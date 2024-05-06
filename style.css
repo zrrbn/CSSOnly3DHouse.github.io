@@ -1,0 +1,1153 @@
+body {
+    margin     : 0;
+    height     : 100vh;
+    background : linear-gradient(rgb(8, 50, 63), rgb(1, 25, 43));
+    perspective: 2000px;
+}
+
+@keyframes rotateDrawing {
+    0% {
+        transform: translate(-50%, -50%) translateZ(-20vmin) rotateY(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) translateZ(-20vmin) rotateY(360deg);
+    }
+}
+
+.canvas {
+    width             : 50vmin;
+    height            : 50vmin;
+    /* background     : rgba(0, 225, 255, 0.123); */
+    position          : absolute;
+    top               : 50%;
+    left              : 50%;
+    transform-style   : preserve-3d;
+}
+
+.canvas:active {
+    animation-play-state: paused;
+}
+
+.canvas div {
+    position       : absolute;
+    transform-style: preserve-3d;
+}
+
+.cube {
+    --h       : 0deg;
+    --s       : 100%;
+    --l       : 50%;
+    --t       : 0;
+    background: hsl(var(--h), var(--s), var(--l));
+    position  : absolute;
+    transform : translateZ(calc(var(--t) * -1));
+}
+
+.cube::before,
+.cube::after {
+    content         : "";
+    position        : absolute;
+    top             : 0;
+    left            : 0;
+    width           : var(--d);
+    height          : 100%;
+    background      : hsl(var(--h), var(--s), calc(var(--l) * 0.8));
+    transform       : rotateY(-90deg);
+    transform-origin: 0 50%;
+}
+
+.cube::after {
+    left            : auto;
+    right           : 0;
+    transform-origin: 100% 50%;
+    transform       : rotateY(90deg);
+}
+
+.cube>div {
+    position       : absolute;
+    top            : 0;
+    left           : 0;
+    width          : 100%;
+    height         : 100%;
+    background     : hsl(var(--h), var(--s), var(--l));
+    transform      : translate3d(0, 0, var(--d));
+    transform-style: preserve-3d;
+}
+
+.cube>div::before,
+.cube>div::after {
+    content         : "";
+    display         : block;
+    position        : absolute;
+    top             : 0;
+    left            : 0;
+    background      : hsl(var(--h), var(--s), calc(var(--l) * 1.15));
+    width           : 100%;
+    height          : var(--d);
+    transform       : rotateX(-90deg);
+    transform-origin: 50% 0;
+}
+
+.cube>div::after {
+    top             : auto;
+    bottom          : 0;
+    transform       : rotateX(90deg);
+    transform-origin: 50% 100%;
+    background      : hsl(var(--h), var(--s), calc(var(--l) * 0.6));
+}
+
+.ground {
+    --h   : 100deg;
+    --s   : 84%;
+    --l   : 25%;
+    --t   : 75vmin;
+    --d   : 130vmin;
+    width : 200%;
+    height: .04vmin;
+    bottom: 0;
+    left  : -50%;
+}
+
+.floor>div::before {
+    background: green;
+}
+
+.floor {
+    --h   : 24deg;
+    --s   : 84%;
+    --l   : 25%;
+    --t   : 50vmin;
+    --d   : 50vmin;
+    width : 100%;
+    height: 5.4vmin;
+    bottom: 0;
+    left  : 0;
+}
+
+.floor>div::before {
+    background:
+        linear-gradient(#0000 0vmin, #0000 0),
+        repeating-linear-gradient(45deg, #0000 0 6%, rgba(0, 0, 0, 0.116) 0 6.25%),
+        repeating-linear-gradient(-45deg, #0000 0 6%, rgba(0, 0, 0, 0.24) 0 6.25%),
+        linear-gradient(#0000 0vmin, rgb(209, 190, 189) 0)
+}
+
+.wall {
+    width : 100%;
+    height: 100%;
+}
+
+.wall .cube {
+    --h: 24deg;
+    --s: 84%;
+    --l: 25%;
+}
+
+.wall .cube:nth-child(1) {
+    --d   : 50vmin;
+    --t   : 50vmin;
+    left  : 0;
+    width : 1.6vmin;
+    height: 100%;
+}
+
+/* .wall .cube:nth-child(2) {
+    --d   : 50vmin;
+    --t   : 50vmin;
+    right : 0;
+    width : 1.6vmin;
+    height: 100%;
+} */
+
+.wall .cube:nth-child(3) {
+    --d   : .6vmin;
+    --t   : .3vmin;
+    left  : 0;
+    width : 2.8vmin;
+    height: 100%;
+}
+
+.wall .cube:nth-child(4) {
+    --d   : .6vmin;
+    --t   : .3vmin;
+    left  : 15.6vmin;
+    width : 8.4vmin;
+    height: 100%;
+}
+
+.wall .cube:nth-child(5) {
+    --d   : .6vmin;
+    --t   : .3vmin;
+    right : 0;
+    width : 8vmin;
+    height: 100%;
+}
+
+.wall .cube:nth-child(6) {
+    --d   : .6vmin;
+    --t   : .3vmin;
+    top   : 0;
+    width : 100%;
+    height: 15%;
+}
+
+.wall .cube:nth-child(7) {
+    --d   : .6vmin;
+    --t   : .3vmin;
+    top   : 0;
+    width : 24vmin;
+    height: 18.6vmin;
+}
+
+.wall .cube:nth-child(8) {
+    --d   : .6vmin;
+    --t   : .3vmin;
+    bottom: 0;
+    right : 0;
+    width : 53%;
+    height: 25vmin;
+}
+
+.rod {
+    position : absolute;
+    --s      : 0%;
+    --l      : 35%;
+    --t      : 30vmin;
+    --d      : 4vmin;
+    width    : .6vmin;
+    bottom   : 0;
+    left     : 1.6vmin;
+    height   : .6vmin;
+    transform: translate3d(-6vmin, -40vmin, -25vmin) rotateY(90deg);
+}
+
+.rod2 {
+    position : absolute;
+    --s      : 0%;
+    --l      : 35%;
+    --t      : 30vmin;
+    --d      : 1vmin;
+    width    : 0.6vmin;
+    bottom   : 0;
+    left     : 1.6vmin;
+    height   : 3vmin;
+    transform: translate3d(-6vmin, -38vmin, -25vmin) rotateY(90deg);
+}
+
+.light {
+    width        : 4vmin;
+    height       : 4vmin;
+    transform    : translate3d(-5.8vmin, 10vmin, -25vmin) rotatex(90deg);
+    background   : hsl(0deg, 0%, 35%);
+    border-radius: 50%;
+}
+
+.glow {
+    width                     : 1.4vmin;
+    height                    : 1.4vmin;
+    transform                 : translate3d(-4.5vmin, 12vmin, -25vmin) rotateY(90deg);
+    background                : rgb(252, 255, 224);
+    border-bottom-left-radius : 50%;
+    border-bottom-right-radius: 50%;
+}
+
+.glow::after {
+    content  : "";
+    position : absolute;
+    width    : 100%;
+    bottom   : 1vmin;
+    z-index  : -1;
+    transform: scale(.5);
+    box-shadow: 0px 0px 1vmin .5vmin rgba(255, 252, 232, 0.548),
+        0px 0px 2vmin 1vmin rgba(255, 249, 204, 0.575),
+        0px 0px 2.2vmin 1.1vmin rgba(255, 254, 246, 0.568);
+}
+
+.glow+.glow {
+    transform: translate3d(-4.5vmin, 12vmin, -25vmin);
+}
+
+.clock {
+    position        : absolute;
+    top             : 0;
+    left            : 0;
+    transform       : translate3d(-2vmin, 9vmin, 25vmin) rotateY(90deg);
+    transform-style : preserve-3d;
+    width           : 7vmin;
+    height          : 7vmin;
+    background-color: #fff;
+    border-radius   : 50%;
+    border          : .4vmin solid #DF554C;
+    background-image:
+        radial-gradient(circle at center, #507D9C .4vmin, transparent .4vmin),
+        radial-gradient(circle at center, white 50%, transparent 50%, transparent 65%, white 65%),
+        linear-gradient(to right, transparent 50%, #507D9C 50%, transparent 51%),
+        linear-gradient(to bottom, transparent 50%, #507D9C 50%, transparent 51%),
+        linear-gradient(-30deg, transparent 50%, #507D9C 50%, transparent 51%),
+        linear-gradient(30deg, transparent 50%, #507D9C 50%, transparent 51%),
+        linear-gradient(60deg, transparent 50%, #507D9C 50%, transparent 51%),
+        linear-gradient(-60deg, transparent 50%, #507D9C 50%, transparent 51%);
+}
+
+.hour-hand {
+    position        : absolute;
+    height          : 2vmin;
+    width           : .5vmin;
+    margin          : auto;
+    top             : -20%;
+    left            : 0;
+    bottom          : 0;
+    right           : 0;
+    border-radius   : .4vmin;
+    background-color: #507D9C;
+    transform-origin: bottom;
+    transform       : rotate(0deg);
+}
+
+.minute-hand {
+    position        : absolute;
+    height          : 2.5vmin;
+    width           : .4vmin;
+    margin          : auto;
+    top             : -30%;
+    left            : 0;
+    bottom          : 0;
+    right           : 0;
+    border-radius   : .4vmin;
+    background-color: #507D9C;
+    transform-origin: bottom;
+    transform       : rotate(30deg);
+}
+
+.second-hand {
+    position        : absolute;
+    height          : 2.5vmin;
+    width           : .2vmin;
+    margin          : auto;
+    top             : -30%;
+    left            : 0;
+    bottom          : 0;
+    right           : 0;
+    border-radius   : .4vmin;
+    background-color: #49555e;
+    transform-origin: bottom;
+    transform       : rotate(120deg);
+}
+
+.step {
+    --h   : 24deg;
+    --s   : 84%;
+    --l   : 25%;
+    --t   : 0;
+    --d   : 5.6vmin;
+    width : 16vmin;
+    bottom: 0;
+    left  : 1.6vmin;
+    height: 5.4vmin;
+}
+
+.step+.step {
+    height: 3.6vmin;
+    --d   : 9.2vmin;
+}
+
+.step+.step+.step {
+    height: 1.8vmin;
+    --d   : 12.8vmin;
+}
+
+.step>div::before {
+    background:
+        linear-gradient(hsl(var(--h), var(--s), calc(var(--l) * 1.15)) 100%, #444 0, #000 99%, hsl(var(--h), var(--s), calc(var(--l) * 1.15)) 0)
+}
+
+.tree {
+    position  : absolute;
+    width     : 16vmin;
+    height    : 20vmin;
+    background: green;
+    background-image:
+        radial-gradient(rgba(2, 104, 2, 0.548) 44%, transparent 0),
+        radial-gradient(rgba(7, 70, 7, 0.548) 76%, transparent 0),
+        radial-gradient(rgba(11, 131, 11, 0.521) 44%, transparent 0);
+    background-size           : 30px 30px;
+    background-position       : 0 0, 15px 15px;
+    border-top-left-radius    : 12vmin;
+    border-bottom-right-radius: 12vmin;
+    transform                 : translateZ(5vmin) rotate(325deg);
+    right                     : -2vmin;
+    bottom                    : 14vmin;
+}
+
+.tree::after {
+    content   : '';
+    position  : absolute;
+    width     : 1.2vmin;
+    height    : 15vmin;
+    top       : 15vmin;
+    left      : -2vmin;
+    background: rgb(73, 28, 1);
+    transform : rotate(35deg);
+}
+
+.leaves {
+    position: absolute;
+    right   : 0;
+    bottom  : 0;
+}
+
+.leaves .leaf:nth-child(1) {
+    position                  : absolute;
+    right                     : 18vmin;
+    bottom                    : 3.5vmin;
+    transform                 : translateZ(4vmin) scale(.5);
+    background                : green;
+    width                     : 3vmin;
+    height                    : 3vmin;
+    border-top-left-radius    : 1.5vmin;
+    border-bottom-right-radius: 1.5vmin
+}
+
+.leaves .leaf:nth-child(2) {
+    position                 : absolute;
+    right                    : 23vmin;
+    bottom                   : 1.5vmin;
+    transform                : translateZ(6vmin) scale(.4);
+    background               : green;
+    width                    : 3vmin;
+    height                   : 3vmin;
+    border-bottom-left-radius: 1.5vmin;
+    border-top-right-radius  : 1.5vmin
+}
+
+.leaves .leaf:nth-child(3) {
+    position                 : absolute;
+    right                    : 13vmin;
+    bottom                   : 1.2vmin;
+    transform                : translateZ(3vmin) scale(.4);
+    background               : green;
+    width                    : 3vmin;
+    height                   : 3vmin;
+    border-bottom-left-radius: 1.5vmin;
+    border-top-right-radius  : 1.5vmin
+}
+
+.leaves .leaf:nth-child(4) {
+    position                  : absolute;
+    right                     : 12vmin;
+    bottom                    : 1.7vmin;
+    transform                 : translateZ(3vmin) scale(.36);
+    background                : green;
+    width                     : 3vmin;
+    height                    : 3vmin;
+    border-top-left-radius    : 1.5vmin;
+    border-bottom-right-radius: 1.5vmin
+}
+
+.flower-body {
+    position : absolute;
+    right    : 24vmin;
+    bottom   : 5vmin;
+    transform: translateZ(6vmin) scale(.4);
+}
+
+.flower-body2 {
+    position : absolute;
+    right    : 20vmin;
+    bottom   : 8.5vmin;
+    transform: translateZ(4vmin) scale(.8);
+}
+
+.flower-body3 {
+    position : absolute;
+    right    : 14vmin;
+    bottom   : 5.5vmin;
+    transform: translateZ(3vmin) scale(.6);
+}
+
+.flower-body::before,
+.flower-body2::before,
+.flower-body3::before {
+    content   : '';
+    position  : absolute;
+    top       : 0;
+    left      : 0;
+    background: rgb(65, 136, 6);
+    transform : translateX(-50%);
+}
+
+.flower-body::before {
+    width : .5vmin;
+    height: 13vmin;
+}
+
+
+.flower-body2::before {
+    width : .36vmin;
+    height: 11.01vmin;
+}
+
+.flower-body3::before {
+    width : .36vmin;
+    height: 10.01vmin;
+}
+
+.petal:nth-child(2) {
+    transform: rotateZ(30deg);
+}
+
+.petal:nth-child(3) {
+    transform: rotateZ(60deg);
+}
+
+.petal:nth-child(4) {
+    transform: rotateZ(90deg);
+}
+
+.petal:nth-child(5) {
+    transform: rotateZ(120deg);
+}
+
+.petal:nth-child(6) {
+    transform: rotateZ(150deg);
+}
+
+.petal:nth-child(7) {
+    transform: rotateZ(180deg);
+}
+
+.petal:nth-child(8) {
+    transform: rotateZ(210deg);
+}
+
+.petal:nth-child(9) {
+    transform: rotateZ(240deg);
+}
+
+.petal:nth-child(10) {
+    transform: rotateZ(270deg);
+}
+
+.petal:nth-child(11) {
+    transform: rotateZ(300deg);
+}
+
+.petal:nth-child(12) {
+    transform: rotateZ(330deg);
+}
+
+.petal:nth-child(13) {
+    transform: rotateZ(360deg);
+}
+
+.flower1 .petal {
+    position        : absolute;
+    width           : .3vmin;
+    height          : 1vmin;
+    background-color: #f0eed76e;
+    border-radius   : 0% 100% 0% 100% / 0% 100% 0% 100%;
+    transform-origin: 0% 0%;
+}
+
+.flower2 .petal {
+    position        : absolute;
+    width           : 1vmin;
+    height          : 1.3vmin;
+    background-color: #ffc400da;
+    border-radius   : 0% 100% 0% 100% / 0% 100% 0% 100%;
+    transform-origin: 0% 0%;
+}
+
+.flower3 .petal {
+    position        : absolute;
+    width           : 1.3vmin;
+    height          : 1.6vmin;
+    background-color: #fd521e;
+    border-radius   : 0% 100% 0% 100% / 0% 100% 0% 100%;
+    transform-origin: 0% 0%;
+}
+
+.flower4 .petal {
+    position        : absolute;
+    width           : 1.6vmin;
+    height          : 1.9vmin;
+    background-color: #ee2b09;
+    border-radius   : 0% 100% 0% 100% / 0% 100% 0% 100%;
+    transform-origin: 0% 0%;
+}
+
+.flower {
+    transform: rotateZ(18deg);
+}
+
+.door {
+    width : 13vmin;
+    height: 26vmin;
+    bottom: 5.4vmin;
+    left  : 2.7vmin;
+}
+
+.door .cube {
+    --h: 20deg;
+    --s: 40%;
+    --l: 40%;
+    --d: 2vmin;
+    --t: 1vmin;
+}
+
+.frame-top,
+.frame-middle {
+    width : 100%;
+    height: 1vmin;
+}
+
+.frame-side {
+    width : 1vmin;
+    height: 100%;
+}
+
+.frame-side+.frame-side {
+    right: 0;
+}
+
+.door .door-board {
+    --d             : 1vmin;
+    --t             : 1vmin;
+    top             : calc(1vmin + 1pt);
+    left            : calc(1vmin + 1pt);
+    width           : calc(100% - 2vmin - 2pt);
+    height          : calc(100% - 1vmin - 1pt);
+    transform       : translateZ(calc(-0.5 * var(--t))) rotateY(60deg);
+    transform-origin: 0% 50%;
+    background      :
+        linear-gradient(#777 0 0) 50% 34% / 20% 1%,
+        repeating-linear-gradient(#ddd 0 7%, #0000 0 15%) 50% 38% / 30% 6%,
+        linear-gradient(#fff 0 0) 50% 36% / 40% 10%,
+        linear-gradient(#815037 1vmin, #0000 0 calc(100% - 10vmin), #815037 0),
+        linear-gradient(to right, #815037 1vmin, #0000 0 calc(100% - 1vmin), #815037 0),
+        linear-gradient(#cdf3 0 0);
+    background-repeat: no-repeat;
+}
+
+.door .door-board>div {
+    background:
+        linear-gradient(#815037 1vmin, #0000 0 calc(100% - 10vmin), #815037 0),
+        linear-gradient(to right, #815037 1vmin, #0000 0 calc(100% - 1vmin), #815037 0),
+        linear-gradient(#cdf3 0 0);
+}
+
+.door .door-board::after {
+    background:
+        #643f2b radial-gradient(gray 70%, #0000 0) no-repeat 50% 53% / .5vmin .5vmin;
+}
+
+/* .door-board span.cube {
+    --h     : 0;
+    --s     : 0%;
+    --l     : 60%;
+    --d     : 0.5vmin;
+    --t     : -2vmin;
+    display : block;
+    position: absolute;
+} */
+
+/* .door-board span.cube.handle {
+    top   : 50%;
+    right : 0.25vmin;
+    width : 15%;
+    height: 2%;
+}
+
+ .door-board span.cube.handle::after {
+    top   : 50%;
+    right : 0.25vmin;
+    width : 50%;
+    height: 20%;
+} */
+
+/* .door-board span.cube.handle>div {
+    background:
+        #eee radial-gradient(gray 70%, #0000 0) no-repeat 80% 53% / .5vmin .5vmin;
+} */
+
+/* .door-board span.cube.neck {
+    --d   : 5vmin;
+    --t   : -1vmin;
+    top   : 50%;
+    right : 0.25vmin;
+    width : 20%;
+    height: 20%;
+} */
+
+.window {
+    width : 18vmin;
+    height: 18vmin;
+    top   : 15%;
+    right : 8vmin;
+}
+
+.window .cube {
+    --h: 20deg;
+    --s: 40%;
+    --l: 40%;
+    --d: 2vmin;
+    --t: 1vmin;
+}
+
+.frame-top+.frame-top {
+    bottom: 0;
+}
+
+.inner-door {
+    --h   : 120deg;
+    left  : calc(1vmin + 1pt);
+    top   : calc(1vmin + 1pt);
+    width : calc(50% - 1vmin - 1.5pt);
+    height: calc(100% - 2vmin - 2pt);
+    background:
+        linear-gradient(64deg, #0000 70%, #fff2 0 75%, #0000 0 78%, #fff2 0 80%, #0000 0);
+    background-color: rgba(175, 190, 219, 0.589);
+    transform       : rotateY(60deg);
+    transform-origin: 0% 50%;
+}
+
+.inner-door+.inner-door {
+    right: calc(1vmin + 1pt);
+    left : unset;
+    background:
+        linear-gradient(64deg, #0000 80%, #fff2 0 84%, #0000 0 90%, #0000 0);
+    background-color: rgba(175, 190, 219, 0.589);
+    transform       : rotateY(-30deg);
+    transform-origin: 100% 50%;
+}
+
+.inner-door .cube {
+    --d: 1.2vmin;
+    --t: .6vmin;
+}
+
+.frame-top+.frame-middle {
+    top: calc(50% - .5vmin);
+}
+
+.frame-middle+.frame-top {
+    bottom: 0;
+}
+
+.desk {
+    width           : 12vmin;
+    height          : 8vmin;
+    transform       : translate3d(27.5vmin, 39vmin, -2vmin) rotateX(90deg);
+    transform-origin: bottom center;
+    transform-style : preserve-3d;
+}
+
+.desk .leg {
+    --h             : 28deg;
+    --s             : 70%;
+    --l             : 46%;
+    --d             : .5vmin;
+    top             : -2.2vmin;
+    width           : .5vmin;
+    height          : 9.6vmin;
+    transform       : rotateX(-90deg);
+    transform-origin: 50% 100%;
+}
+
+.desk .leg-2 {
+    right: .2vmin;
+}
+
+.desk .leg-3 {
+    right : .2vmin;
+    top   : auto;
+    bottom: 100.75%;
+}
+
+.desk .leg-4 {
+    left  : .2vmin;
+    top   : auto;
+    bottom: 100.75%;
+}
+
+.desk .book2-cover1 {
+    --h      : 270deg;
+    --s      : 70%;
+    --l      : 60%;
+    --d      : .2vmin;
+    --t      : -11.3vmin;
+    width    : 2vmin;
+    height   : 3vmin;
+    top      : 30%;
+    left     : 50%;
+    transform: translateZ(calc(var(--t) * -1)) rotate(30deg);
+}
+
+.desk .book2-cover2 {
+    --h      : 270deg;
+    --s      : 70%;
+    --l      : 60%;
+    --d      : .2vmin;
+    --t      : -10.7vmin;
+    width    : 2vmin;
+    height   : 3vmin;
+    top      : 30%;
+    left     : 50%;
+    transform: translateZ(calc(var(--t) * -1)) rotate(30deg);
+}
+
+.desk .book2 {
+    --h      : 270deg;
+    --s      : 50%;
+    --l      : 100%;
+    --d      : .4vmin;
+    --t      : -10.9vmin;
+    width    : 2vmin;
+    height   : 3vmin;
+    top      : 30%;
+    left     : 50%;
+    transform: translateZ(calc(var(--t) * -1)) rotate(30deg);
+}
+
+.desk .book2::before,
+.desk .book2 div::after {
+    background: rgb(196, 196, 196);
+}
+
+.desk .book2::after {
+    background: rgb(151, 151, 151);
+}
+
+.desk .book2::before {
+    background: hsl(270deg, 70%, 60%);
+}
+
+.desk .book {
+    --h   : 80deg;
+    --s   : 70%;
+    --l   : 60%;
+    --d   : .9vmin;
+    --t   : -9.7vmin;
+    width : 3.6vmin;
+    height: 2.4vmin;
+    top   : 30%;
+    left  : 36%;
+}
+
+.desk .book::before,
+.desk .book::after {
+    background: rgb(245, 247, 235);
+}
+
+.desk .book div::after {
+    background: rgb(223, 224, 215);
+}
+
+.desk .plane {
+    --h   : 28deg;
+    --s   : 70%;
+    --l   : 46%;
+    --d   : .4vmin;
+    --t   : -9.6vmin;
+    width : 100%;
+    height: 100%;
+}
+
+.chair {
+    width           : 6.6vmin;
+    height          : 6.6vmin;
+    transform       : translate3d(31vmin, 40vmin, -8vmin) rotateX(90deg) rotate(-11deg);
+    transform-origin: bottom center;
+    transform-style : preserve-3d;
+}
+
+.chair .leg {
+    --h             : 28deg;
+    --s             : 70%;
+    --l             : 46%;
+    --d             : .5vmin;
+    top             : -.5vmin;
+    width           : .5vmin;
+    height          : 6.6vmin;
+    transform       : rotateX(-90deg);
+    transform-origin: 50% 100%;
+}
+
+.chair .leg-2 {
+    right: 0%;
+}
+
+.chair .leg-3 {
+    right : 0;
+    top   : auto;
+    bottom: 100.75%;
+    height: 12.6vmin;
+}
+
+.chair .leg-4 {
+    left  : 0;
+    top   : auto;
+    bottom: 100.75%;
+    height: 12.6vmin;
+}
+
+.chair .seat {
+    --h   : 347deg;
+    --s   : 96%;
+    --l   : 38%;
+    --d   : .4vmin;
+    --t   : -6.6vmin;
+    width : 100%;
+    height: 100%;
+}
+
+.chair .back {
+    --h             : 28deg;
+    --s             : 70%;
+    --l             : 46%;
+    --d             : 0.5vmin;
+    bottom          : 99%;
+    width           : 100%;
+    height          : .5vmin;
+    transform       : rotateX(-90deg) translateY(-9.5vmin);
+    transform-origin: 50% 100%;
+}
+
+.chair .back+.back {
+    transform: rotateX(-90deg) translateY(-11vmin);
+}
+
+.bed {
+    width    : 26vmin;
+    height   : 9vmin;
+    transform: translate3d(2vmin, 40vmin, -44vmin) rotateX(90deg);
+}
+
+.bed .board {
+    --h   : 28deg;
+    --s   : 70%;
+    --l   : 46%;
+    --d   : 1vmin;
+    --t   : -2vmin;
+    width : 100%;
+    height: 100%;
+}
+
+.bed .mattress {
+    background: rgb(247, 242, 242);
+    --d       : 1.6vmin;
+    --t       : -3vmin;
+    width     : 40%;
+    height    : 100%;
+}
+
+.mattress div {
+    background: rgb(247, 242, 242);
+}
+
+.mattress::before,
+.mattress::after,
+.mattress div::before,
+.mattress div::after {
+    background: rgb(216, 212, 212);
+}
+
+.bed .blanket {
+    background: rgb(162, 213, 235);
+    --d       : 1.7vmin;
+    --t       : -3vmin;
+    width     : 15%;
+    height    : 100%;
+    right     : 45%;
+}
+
+.blanket div {
+    background: rgb(162, 213, 235);
+}
+
+.blanket::before,
+.blanket::after,
+.blanket div::before,
+.blanket div::after {
+    background: rgb(152, 197, 216);
+}
+
+.bed .bedspread {
+    background: white;
+    background-image: linear-gradient(90deg, rgba(200, 0, 0, .5) 50%, transparent 0),
+        linear-gradient(rgba(200, 0, 0, .5) 50%, transparent 0);
+    background-size: 10px 10px;
+    --d            : 1.9vmin;
+    --t            : -2.8vmin;
+    width          : 45%;
+    height         : 100%;
+    right          : 1vmin;
+}
+
+.bedspread div {
+    background: white;
+    background-image: linear-gradient(90deg, rgba(200, 0, 0, .5) 50%, transparent 0),
+        linear-gradient(rgba(200, 0, 0, .5) 50%, transparent 0);
+    background-size: 10px 10px;
+}
+
+.bedspread::before,
+.bedspread::after,
+.bedspread div::before,
+.bedspread div::after {
+    background: white;
+    background-image: linear-gradient(90deg, rgba(200, 0, 0, .5) 50%, transparent 0),
+        linear-gradient(rgba(200, 0, 0, .5) 50%, transparent 0);
+    background-size: 10px 10px;
+}
+
+.bed .pillow {
+    background: rgb(162, 213, 235);
+    --d       : 1.7vmin;
+    --t       : -4vmin;
+    width     : 15%;
+    height    : 60%;
+    top       : 20%;
+    left      : 5%;
+}
+
+.pillow div {
+    background   : rgb(162, 213, 235);
+    border-radius: 20PX;
+}
+
+.pillow::before,
+.pillow::after,
+.pillow div::before,
+.pillow div::after {
+    background: rgb(134, 181, 201);
+}
+
+.bed .leg {
+    --h             : 28deg;
+    --s             : 70%;
+    --l             : 46%;
+    --d             : 1vmin;
+    top             : 0;
+    width           : 1vmin;
+    height          : 5.6vmin;
+    transform       : rotateX(-90deg);
+    transform-origin: 50% 100%;
+}
+
+.bed .leg-1 {
+    top: 27%;
+}
+
+.bed .leg-2 {
+    top  : 27%;
+    right: 0;
+}
+
+.bed .leg-3 {
+    right : 0;
+    top   : auto;
+    bottom: 100%;
+}
+
+.bed .leg-4 {
+    left  : 0;
+    top   : auto;
+    bottom: 100%;
+}
+
+.table {
+    width    : 5vmin;
+    height   : 6vmin;
+    transform: translate3d(2vmin, 38vmin, -35.5vmin) rotateX(90deg);
+}
+
+.table .board {
+    --h   : 28deg;
+    --s   : 70%;
+    --l   : 46%;
+    --d   : 6vmin;
+    --t   : 4vmin;
+    width : 100%;
+    height: 100%;
+}
+
+.table .board::after {
+    background:
+        linear-gradient(#794110 5%, #0000 0 95%, #794110 0),
+        linear-gradient(to right, #794110 5%, #0000 0 44%, #794110 0 48%, #0000 0 80%, #794110 0 100%),
+        radial-gradient(circle, rgb(65, 33, 4) 25%, #0000 0) no-repeat 10% 48% / 23% 20%,
+        radial-gradient(circle, rgb(65, 33, 4) 25%, #0000 0) no-repeat 63% 48% / 20% 20%;
+    background-repeat: no-repeat;
+}
+
+.lamp {
+    width    : 5vmin;
+    height   : 6vmin;
+    transform: translate3d(2vmin, 33vmin, -36.5vmin) rotateY(90deg);
+}
+
+.shade {
+    width        : 3vmin;
+    height       : 2.5vmin;
+    background   : #EEE4CF;
+    z-index      : 3;
+    border-radius: 50% / 10%;
+    clip-path    : polygon(20% 0, 80% 0, 100% 100%, 0 100%);
+    background-image:
+        radial-gradient(closest-corner at 50% 2%, #EEE4CF 70%, transparent 78%),
+        linear-gradient(to right, transparent 48%, #ffffff66 58% 75%, transparent 88%),
+        linear-gradient(-253deg, #ffffffcc, #E5CB9A 15%, #DBB97C 20%, #EDDBB7 36%, #ffffff33 54%, transparent 95%),
+        linear-gradient(253deg, #F8EFDD 20%, transparent)
+}
+
+.shade+.shade {
+    transform: rotateY(45deg);
+}
+
+.shade+.shade+.shade {
+    transform: rotateY(90deg);
+}
+
+.shade+.shade+.shade+.shade {
+    transform: rotateY(135deg);
+}
+
+.lamp .leg {
+    width     : .5vmin;
+    height    : 5vmin;
+    background: #995136;
+    top       : 1min;
+    left      : 1.25vmin;
+    z-index   : 2;
+    background-image:
+        linear-gradient(#00000044, transparent 20% 99.8%, #00000033 100%),
+        linear-gradient(to right, transparent 15%, #00000055 36% 44%, #00000011 60%, #ffffff4f 78% 95%, #9B5539 95%)
+}
+
+.lamp .leg+.leg {
+    transform: rotateY(90deg);
+    top      : 3.5vmin;
+}
+
+.foot {
+    width        : 3vmin;
+    height       : .6vmin;
+    background   : #995136;
+    top          : 5vmin;
+    border-radius: 50%;
+    box-shadow   : 0 0.4vh #773321;
+    background-image:
+        linear-gradient(to right, transparent 11vh, transparent 12vh, transparent 13vh),
+        linear-gradient(40deg, transparent 5% 24%, #0000001f 28% 36%, #00000011 37% 44%, transparent 50%, #ffffff1c 56%, #ffffff44 68%, #ffffff1c 92%, transparent)
+}
+
+.foot+.foot {
+    transform: rotateY(90deg);
+}
+
+.canvas {
+     animation: rotateDrawing 20s linear infinite; 
+    transform: translate(-50%, -50%) translate3d(0vmin, 0, -40vmin) rotate3d(0, 1, 0, 30deg);
+}
